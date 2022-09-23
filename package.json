@@ -56,7 +56,15 @@
     "parserOptions": {
       "ecmaVersion": 2020
     },
-    "rules": {},
+    "rules": {
+      "prettier/prettier": [
+        "error",
+        {
+          "endOfLine": "auto"
+        }
+      ],
+      "no-empty": ["error", { "allowEmptyCatch": true }]
+    },
     "overrides": [
       {
         "files": [
