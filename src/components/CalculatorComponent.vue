@@ -1,13 +1,22 @@
+<!-- eslint-disable prettier/prettier -->
 <template>
   <v-card
-    class="d-flex flex-column align-end px-12 blue"
+    class="
+      d-flex
+      flex-column
+      align-end
+      px-0 px-sm-12 px-md-12 px-lg-12 px-xl-12
+      card-calc
+      blue
+    "
     width="470"
-    height="90%"
+    height="600px"
   >
-    <v-card-text class="text-h3 font-weight-bold text-white pr-0"
+    <v-card-text
+      class="text-h3 font-weight-bold calc-experession text-white pr-0"
       >{{ fisrNumber }} {{ sign }} {{ lastNumber }}
     </v-card-text>
-    <v-card-text class="text-h2 font-weight-bold card-text text-white pr-0">{{
+    <v-card-text class="text-h2 font-weight-bold calc-text text-white pr-0">{{
       experessionValue
     }}</v-card-text>
     <div class="divider"></div>
@@ -40,7 +49,6 @@ export default {
   components: { ButtonCalculator },
   data() {
     return {
-      experessionString: "",
       experessionValue: "0",
       fisrNumber: "",
       lastNumber: "",
@@ -88,28 +96,35 @@ export default {
       }
     },
     root(): void {
+      let value: string | number = Math.sqrt(parseFloat(this.experessionValue));
+      if (!Number.isInteger(value)) {
+        value = value.toFixed(10);
+      }
       if (this.checkNumbers && this.experessionValue) {
-        const root = Math.sqrt(parseFloat(this.experessionValue)).toFixed(1);
-        this.experessionValue = root.toString();
+        this.experessionValue = value.toString();
         this.equalClick();
       } else if (this.experessionValue && this.fisrNumber && this.lastNumber) {
         this.fisrNumber = "√";
         this.lastNumber = this.experessionValue;
         this.sign = "";
-        this.experessionValue = Math.sqrt(parseFloat(this.experessionValue))
-          .toFixed(10)
-          .toString();
+        this.experessionValue = value.toString();
       } else if (this.experessionValue) {
-        this.experessionValue = Math.sqrt(parseFloat(this.experessionValue))
-          .toFixed(10)
-          .toString();
+        this.fisrNumber = "√";
+        this.lastNumber = this.experessionValue;
+        this.experessionValue = value.toString();
       }
     },
     procent(): void {
       if (this.checkNumbers && this.experessionValue) {
-        const procent =
+        let procent: string | number =
           (parseFloat(this.fisrNumber) / 100) *
           parseFloat(this.experessionValue);
+        if (!Number.isInteger(procent)) {
+          procent = procent.toFixed(5);
+          while (procent.slice(-1) === "0") {
+            procent = procent.slice(0, -1);
+          }
+        }
         this.experessionValue = procent.toString();
         this.equalClick();
       }
@@ -176,6 +191,9 @@ export default {
       }
       this.experessionValue = this.switchSign(this.sign);
     },
+    removeZero(): void {
+      //
+    },
     switchSign(sign: string): string {
       let experessionValue = "";
       switch (sign) {
@@ -214,8 +232,12 @@ export default {
 </script>
 
 <style scoped>
-.card-text {
+.calc-text {
   color: white;
+  height: 92px;
+}
+.calc-experession {
+  height: 82px;
 }
 .grid-wrap-btns {
   display: grid;

@@ -1,8 +1,6 @@
 <template>
   <v-app>
-    <v-main class="d-flex justify-center align-center"
-      ><calculator-component></calculator-component>
-    </v-main>
+    <v-main class=""><calculator-component></calculator-component> </v-main>
   </v-app>
 </template>
 
@@ -23,6 +21,7 @@ export default Vue.extend({
 .v-main__wrap {
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 .text-white {
   color: white !important;
@@ -34,5 +33,19 @@ export default Vue.extend({
   height: 2px;
   background: white;
   width: 100%;
+}
+.v-main__wrap {
+  height: 100%;
+}
+
+@media (max-width: 600px) {
+  .card-calc {
+    height: 100% !important;
+    width: 100% !important;
+    justify-content: center;
+  }
+  .calc-text {
+    margin-right: 24px;
+  }
 }
 </style>
