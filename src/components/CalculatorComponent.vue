@@ -17,9 +17,9 @@
         <v-card-text
           v-bind="attrs"
           v-on="on"
-          class="text-h3 font-weight-bold calc-experession text-white pr-0"
-          >{{ fisrNumber }} {{ sign }} {{ lastNumber }}
-        </v-card-text>
+          class="text-h3 font-weight-bold calc-experession text-white px-0"
+          >{{ fisrNumber }} {{ sign }} {{ lastNumber }}</v-card-text
+        >
       </template>
       <span>{{ fisrNumber }} {{ sign }} {{ lastNumber }}</span>
     </v-tooltip>
@@ -34,14 +34,13 @@
           v-else
           v-bind="attrs"
           v-on="on"
-          class="text-h2 font-weight-bold calc-text text-white pr-0"
+          class="text-h2 font-weight-bold calc-text text-white px-0"
           >{{ experessionValue }}</v-card-text
         >
       </template>
       <span>{{ experessionValue }}</span>
     </v-tooltip>
     <div class="divider mb-4"></div>
-    <!-- <v-btn icon><v-img light src="@/assets/delete.png"></v-img></v-btn> -->
     <div class="grid-wrap-btns">
       <button-calculator @click.native="clear">C</button-calculator>
       <button-calculator @click.native="root">√</button-calculator>
@@ -124,8 +123,11 @@ export default {
     },
     root(): void {
       let value: string | number = Math.sqrt(parseFloat(this.experessionValue));
+      if (isNaN(value)) {
+        return;
+      }
       if (!Number.isInteger(value)) {
-        value = value.toFixed(10);
+        value = value.toFixed(3);
       }
       if (this.checkNumbers && this.experessionValue) {
         this.experessionValue = value.toString();
@@ -147,7 +149,7 @@ export default {
           (parseFloat(this.fisrNumber) / 100) *
           parseFloat(this.experessionValue);
         if (!Number.isInteger(procent)) {
-          procent = procent.toFixed(5);
+          procent = procent.toFixed(3);
           while (procent.slice(-1) === "0") {
             procent = procent.slice(0, -1);
           }
@@ -267,6 +269,18 @@ export default {
       }
       return experessionValue ? experessionValue : this.experessionValue;
     },
+    deleteLastSymbol(): void {
+      if (
+        this.experessionValue &&
+        this.experessionValue !== "0" &&
+        !this.equal
+      ) {
+        this.experessionValue = this.experessionValue.slice(0, -1);
+        if (this.experessionValue === "") {
+          this.experessionValue = "0";
+        }
+      }
+    },
     clear(): void {
       this.fisrNumber = "";
       this.lastNumber = "";
@@ -274,6 +288,50 @@ export default {
       this.sign = "";
       this.experessionValue = "0";
     },
+    listenerKey(event: KeyboardEvent): void {
+      const { key } = event;
+      if (this.numbers.includes(key)) {
+        this.addNumber(key);
+      }
+      switch (key) {
+        case "+":
+          this.add();
+          break;
+        case "-":
+          this.subtract();
+          break;
+        case "/":
+          this.share();
+          break;
+        case "*":
+          this.multiply();
+          break;
+        case "=":
+          this.equalClick();
+          break;
+        case "Enter":
+          this.equalClick();
+          break;
+        case "%":
+          this.procent();
+          break;
+        case "Escape":
+          this.clear();
+          break;
+        case "Backspace":
+          this.deleteLastSymbol();
+          break;
+        case "Delete":
+          this.deleteLastSymbol();
+          break;
+      }
+    },
+  },
+  mounted() {
+    document.addEventListener("keydown", this.listenerKey);
+  },
+  beforeDestroy() {
+    document.removeEventListener("keydown", this.listenerKey);
   },
 };
 </script>
