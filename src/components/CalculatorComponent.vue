@@ -10,16 +10,38 @@
       blue
     "
     width="470"
-    height="600px"
+    height="616px"
   >
-    <v-card-text
-      class="text-h3 font-weight-bold calc-experession text-white pr-0"
-      >{{ fisrNumber }} {{ sign }} {{ lastNumber }}
-    </v-card-text>
-    <v-card-text class="text-h2 font-weight-bold calc-text text-white pr-0">{{
-      experessionValue
-    }}</v-card-text>
-    <div class="divider"></div>
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on, attrs }">
+        <v-card-text
+          v-bind="attrs"
+          v-on="on"
+          class="text-h3 font-weight-bold calc-experession text-white pr-0"
+          >{{ fisrNumber }} {{ sign }} {{ lastNumber }}
+        </v-card-text>
+      </template>
+      <span>{{ fisrNumber }} {{ sign }} {{ lastNumber }}</span>
+    </v-tooltip>
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on, attrs }">
+        <v-card-text
+          v-if="checkLengthExpression"
+          class="text-h5 font-weight-bold calc-text text-white pr-0"
+          >Превышен лимит числа</v-card-text
+        >
+        <v-card-text
+          v-else
+          v-bind="attrs"
+          v-on="on"
+          class="text-h2 font-weight-bold calc-text text-white pr-0"
+          >{{ experessionValue }}</v-card-text
+        >
+      </template>
+      <span>{{ experessionValue }}</span>
+    </v-tooltip>
+    <div class="divider mb-4"></div>
+    <!-- <v-btn icon><v-img light src="@/assets/delete.png"></v-img></v-btn> -->
     <div class="grid-wrap-btns">
       <button-calculator @click.native="clear">C</button-calculator>
       <button-calculator @click.native="root">√</button-calculator>
@@ -60,6 +82,11 @@ export default {
   computed: {
     checkNumbers(): boolean {
       return this.fisrNumber && !this.lastNumber ? true : false;
+    },
+    checkLengthExpression(): boolean {
+      return this.fisrNumber.length + this.experessionValue.length <= 45
+        ? false
+        : true;
     },
   },
   methods: {
@@ -136,6 +163,7 @@ export default {
       }
     },
     generalFunctionality(sign: string): boolean {
+      this.removeExcessZero();
       this.lastDotRemove();
       this.equal = false;
       if (sign !== this.sign && this.checkNumbers && this.experessionValue) {
@@ -167,6 +195,10 @@ export default {
       }
     },
     addNumber(numberParam: string): void {
+      if (this.excessZero(numberParam) || this.checkLengthExpression) {
+        return;
+      }
+
       if (this.equal) {
         if (this.fisrNumber && this.lastNumber) {
           this.fisrNumber = "";
@@ -181,18 +213,33 @@ export default {
       } else if (this.experessionValue === "0") {
         this.experessionValue = numberParam;
       }
-      console.log("number ", numberParam);
     },
     equalClick(): void {
       if (this.fisrNumber && this.experessionValue) {
         this.equal = true;
+        this.removeExcessZero();
         this.lastDotRemove();
         this.lastNumber = this.experessionValue;
       }
       this.experessionValue = this.switchSign(this.sign);
     },
-    removeZero(): void {
-      //
+    excessZero(number: string): boolean {
+      const expression =
+        !this.experessionValue.includes(".") && this.experessionValue === "0";
+      if (number === "0" && !this.equal && expression) {
+        return true;
+      }
+      if (number === "00" && (expression || this.experessionValue === "")) {
+        return true;
+      }
+      return false;
+    },
+    removeExcessZero(): void {
+      if (this.experessionValue.includes(".")) {
+        while (this.experessionValue.slice(-1) === "0") {
+          this.experessionValue = this.experessionValue.slice(0, -1);
+        }
+      }
     },
     switchSign(sign: string): string {
       let experessionValue = "";
@@ -234,10 +281,22 @@ export default {
 <style scoped>
 .calc-text {
   color: white;
-  height: 92px;
+  height: 82px;
+  max-width: 422px;
+  word-break: normal !important;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
 }
 .calc-experession {
-  height: 82px;
+  height: 72px;
+  max-width: 422px;
+  word-break: normal !important;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
 }
 .grid-wrap-btns {
   display: grid;

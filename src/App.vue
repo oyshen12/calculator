@@ -48,4 +48,12 @@ export default Vue.extend({
     margin-right: 24px;
   }
 }
+@media (max-width: 422px) {
+  .calc-experession {
+    max-width: 90% !important;
+  }
+  .calc-text {
+    max-width: 90% !important;
+  }
+}
 </style>
