@@ -176,6 +176,9 @@ export default {
       }
 
       this.sign = sign;
+      if (this.checkNumbers && !this.experessionValue) {
+        return false;
+      }
       if (!this.fisrNumber && this.experessionValue) {
         this.fisrNumber = this.experessionValue;
         this.experessionValue = "";
@@ -223,7 +226,12 @@ export default {
         this.lastDotRemove();
         this.lastNumber = this.experessionValue;
       }
-      this.experessionValue = this.switchSign(this.sign);
+      const experessionValue = this.switchSign(this.sign);
+      if (isNaN(parseFloat(experessionValue))) {
+        this.experessionValue = "0";
+      } else {
+        this.experessionValue = experessionValue;
+      }
     },
     excessZero(number: string): boolean {
       const expression =
