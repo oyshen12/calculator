@@ -1,5 +1,6 @@
 # Калькулятор
 Простой адаптивный калькулятор скопированый по функционалу с калькулятора на windows.
+Проект доступен на GitHub Pages: https://oyshen12.github.io/calculator/
 
 ## Project setup
 ```
