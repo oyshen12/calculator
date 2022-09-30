@@ -115,9 +115,14 @@ export default {
     },
     share(): void {
       if (this.generalFunctionality(operators.SHARE) && this.checkNumbers) {
-        this.fisrNumber = (
-          parseFloat(this.fisrNumber) / parseFloat(this.experessionValue)
-        ).toString();
+        const number =
+          parseFloat(this.fisrNumber) / parseFloat(this.experessionValue);
+        if (Number.isInteger(number)) {
+          this.fisrNumber = number.toString();
+        } else {
+          this.fisrNumber = number.toFixed(3).toString();
+        }
+
         this.experessionValue = "";
       }
     },
@@ -253,6 +258,8 @@ export default {
     },
     switchSign(sign: string): string {
       let experessionValue = "";
+      const numberShare =
+        parseFloat(this.fisrNumber) / parseFloat(this.experessionValue);
       switch (sign) {
         case operators.PLUS:
           experessionValue = (
@@ -270,9 +277,11 @@ export default {
           ).toString();
           break;
         case operators.SHARE:
-          experessionValue = (
-            parseFloat(this.fisrNumber) / parseFloat(this.experessionValue)
-          ).toString();
+          if (Number.isInteger(numberShare)) {
+            experessionValue = numberShare.toString();
+          } else {
+            experessionValue = numberShare.toFixed(3).toString();
+          }
           break;
       }
       return experessionValue ? experessionValue : this.experessionValue;
