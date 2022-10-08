@@ -3,7 +3,7 @@
 
 Проект доступен на GitHub Pages: https://oyshen12.github.io/calculator/
 
-Стек: Vue 2, Vuex, Vuetify. Также калькулятор покрыт unit тестами.
+Стек: Vue 2, TypeScript, Vuex, Vuetify. Также калькулятор покрыт unit тестами.
 
 ## Project setup
 ```
