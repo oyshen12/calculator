@@ -42,23 +42,23 @@
     </v-tooltip>
     <div class="divider mb-4"></div>
     <div class="grid-wrap-btns">
-      <button-calculator @click.native="clear">C</button-calculator>
-      <button-calculator @click.native="root">√</button-calculator>
-      <button-calculator @click.native="procent">%</button-calculator>
-      <button-calculator @click.native="share">/</button-calculator>
+      <button-calculator @click="clear">C</button-calculator>
+      <button-calculator @click="root">√</button-calculator>
+      <button-calculator @click="procent">%</button-calculator>
+      <button-calculator @click="share">/</button-calculator>
       <div class="btns-numbers">
         <button-calculator
           v-for="(number, index) in numbers"
           :key="index"
-          @click.native="addNumber(number)"
+          @click="addNumber(number)"
           >{{ number }}</button-calculator
         >
-        <button-calculator @click.native="dot">.</button-calculator>
+        <button-calculator @click="dot">.</button-calculator>
       </div>
-      <button-calculator @click.native="multiply">×</button-calculator>
-      <button-calculator @click.native="subtract">-</button-calculator>
-      <button-calculator @click.native="add">+</button-calculator>
-      <button-calculator @click.native="equalClick">=</button-calculator>
+      <button-calculator @click="multiply">×</button-calculator>
+      <button-calculator @click="subtract">-</button-calculator>
+      <button-calculator @click="add">+</button-calculator>
+      <button-calculator @click="equalClick">=</button-calculator>
     </div>
   </v-card>
 </template>
@@ -83,9 +83,7 @@ export default {
       return this.fisrNumber && !this.lastNumber ? true : false;
     },
     checkLengthExpression(): boolean {
-      return this.fisrNumber.length + this.experessionValue.length <= 45
-        ? false
-        : true;
+      return this.fisrNumber.length + this.experessionValue.length <= 45;
     },
   },
   methods: {

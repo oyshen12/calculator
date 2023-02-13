@@ -1,15 +1,11 @@
 <template>
-  <v-btn icon fab x-large color="white"
+  <v-btn @click="$emit('click')" icon fab x-large color="white"
     ><span class="btn-text"><slot></slot></span
   ></v-btn>
 </template>
 
 <script>
-export default {
-  setup() {
-    //
-  },
-};
+export default {};
 </script>
 
 <style scoped>
